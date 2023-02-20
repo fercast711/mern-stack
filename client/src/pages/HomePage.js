@@ -26,7 +26,7 @@ export const HomePage = ({dispatch}) => {
       <Link to="/new" className="px-3 py-2 bg-indigo-500 hover:bg-indigo-600 text-white">Create New Post</Link>
       </header>
       
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-1">
       {posts.map(post => (
        <PostCard post={post} key={post._id} />
       ))}
