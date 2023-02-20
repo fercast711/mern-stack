@@ -29,7 +29,8 @@ export const PostForm = ({dispatch}) => {
       enableReinitialize
       validationSchema={Yup.object({
         title: Yup.string().required("Title is Require"),
-        description: Yup.string().required("Description is Require")
+        description: Yup.string().required("Description is Require"),
+        image: !params.id?Yup.mixed().required("This file is Require"): null
       })}
       onSubmit={(values, actions)=>{
         console.log(values)
@@ -56,7 +57,7 @@ export const PostForm = ({dispatch}) => {
           text-white w-full mb-4' />
 
           <ErrorMessage component="p" className="text-red-400 text-sm" name="title" />
-          
+          <p></p>
           <label htmlFor="description"
           className="text-sm font-bold text-gray-400 ">
             Description
@@ -68,14 +69,15 @@ export const PostForm = ({dispatch}) => {
           className='px-3 py-2 focus:outline-none rounded bg-gray-600 text-white w-full'
           placeholder='Description'
           rows={3}/>
-
-          <ErrorMessage component="p" className="text-red-400 text-sm" name="description"/>
           
+          <ErrorMessage component="p" className="text-red-400 text-sm" name="description"/>
+          <p></p>
           <input type="file" name="image" 
           className="px-3 py-2 focus:outline-none rounded-none 
           bg-gray-600 text-white w-full"
           onChange={(e)=> setFieldValue('image',e.target.files[0])}/>
-
+          <ErrorMessage component="p" className="text-red-400 text-sm" name="image" />
+          <p></p>
           <button type="submit" 
           className="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded 
           mt-2 text-white focus:outline-none disabled:bg-indigo-400"

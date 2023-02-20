@@ -34,8 +34,23 @@ export const createPosts = async(req,res)=> {
 
 export const updatePosts = async (req,res)=> {
     try {
-        const post = await Post.findByIdAndUpdate(req.params.id, req.body, {new: true})
-        return res.json(post)
+        const {title, description} = req.body
+        let image
+        if(req.files?.image){
+            const result = await uploadImage(req.files.image.tempFilePath)
+            await fs.remove(req.files.image.tempFilePath)
+            image={
+                url: result.secure_url,
+                public_id: result.public_id
+            }
+            const post = await Post.findByIdAndUpdate(req.params.id, {title,description,image})
+            await deleteImage(post.image.public_id)
+            return res.json({title,description,image})
+        }else{
+            const post = await Post.findByIdAndUpdate(req.params.id, {title, description}, {new: true})
+            return res.json(post)
+        }
+         //return res.json(post)
     } catch (error) {
         return res.status(500).json({message: error.message})
     }

@@ -50,8 +50,18 @@ export const fetchPostUpdate = createAsyncThunk(
     async(objeto)=>{
         try {
             //console.log(objeto)
-            await updatePostRequest(objeto.id, objeto.newField)
+           const res = await updatePostRequest(objeto.id, objeto.newField)
+           console.log(res.data)
+           let newA = {
+            id: objeto.id,
+            newPost:{
+                image: res.data.image,
+                title: res.data.title,
+                description: res.data.description
+            }
             
+           }
+            return newA
         } catch (error) {
             console.log(error)
         }
@@ -66,7 +76,8 @@ export const postSlice = createSlice({
             title: "",
             description: "",
             image: null
-        }
+        },
+        temp: []
     },
     reducers:{
         setPostGet: (state,actions)=>{
@@ -88,7 +99,11 @@ export const postSlice = createSlice({
             state.postGet.title = actions.payload.title
             state.postGet.description = actions.payload.description
         })
-        builder.addCase(fetchPostUpdate.fulfilled)
+        builder.addCase(fetchPostUpdate.fulfilled, (state, actions)=>{
+            state.temp = [...state.posts.filter(item => item._id === actions.payload.id)]
+            let i = state.posts.indexOf(state.temp[0])
+            state.posts[i] = actions.payload.newPost
+        })
     }
 })
 
